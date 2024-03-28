@@ -5,6 +5,20 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>Dashboard</title>
+    <script type="text/javascript">
+        window.onload = function () {
+            if (window.history && window.history.pushState) {
+                window.history.pushState('forward', null, './#');
+                window.onpopstate = function () {
+                    if (sessionStorage.getItem("email")) {
+                        window.location.href = "Dashboard.aspx";
+                    } else {
+                        window.history.pushState('forward', null, './#');
+                    }
+                };
+            }
+        };
+</script>
 </head>
 <body>
     <form id="form1" runat="server">
@@ -31,8 +45,8 @@
                                 <td><%# Eval("pass") %></td>
                                 <td><%# Eval("gender") %></td>
                                 <td>
-                                    <a href="edit_student.aspx?uid=<%# Eval("id") %>">Edit</a>
-                                    <a href="delete_student.aspx?did=<%# Eval("id") %>">Delete</a>
+                                    <a href="Update.aspx?uid=<%# Eval("id") %>">Edit</a>
+                                    <a href="Delete.aspx?did=<%# Eval("id") %>">Delete</a>
                                 </td>
                             </tr>
                         </ItemTemplate>
@@ -43,3 +57,4 @@
     </form>
 </body>
 </html>
+
