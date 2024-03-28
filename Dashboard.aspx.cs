@@ -6,6 +6,14 @@ public partial class Dashboard : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+        if (Session["email"] == null)
+        {
+            Response.Redirect("Login.aspx");
+        }
+        else
+        {
+            Response.Write("<script>alert('Welcome "+ Session["email"] + "')</script>");
+        }   
         if (!IsPostBack)
         {
             ViewAllStudents();
@@ -36,15 +44,11 @@ public partial class Dashboard : System.Web.UI.Page
                 else
                 {
                     Response.Write("<script>alert('NO Data Found')</script>");
-
-                    // No data found, display a message or handle it accordingly
                 }
             }
             catch (Exception ex)
             {
                 Response.Write("<script>alert('SQL Catch Block')</script>");
-
-                // Handle any exceptions
             }
         }
     }
