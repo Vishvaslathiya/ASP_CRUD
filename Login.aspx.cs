@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -10,12 +10,10 @@ public partial class Login : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-
-    }
-
-    protected void register_Click(object sender, EventArgs e)
-    {
-
+        if (Session["email"] != null)
+        {
+            Response.Redirect("Dashboard.aspx");
+        }
     }
 
     protected void login_Click(object sender, EventArgs e)
@@ -30,7 +28,8 @@ public partial class Login : System.Web.UI.Page
 
         if (isloged>0)
         {
-
+            Session["email"]= logEmail;
+            Session["password"]= logPass;
             Response.Write("<script>alert('Login Successful')</script>");
             Response.Redirect("Dashboard.aspx");
         }
