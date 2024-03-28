@@ -1,44 +1,51 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
+using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
 
 public partial class Dashboard : System.Web.UI.Page
 {
-
     protected void Page_Load(object sender, EventArgs e)
     {
         if (!IsPostBack)
         {
-            viewAllStudents();
-
+            ViewAllStudents();
         }
     }
 
-    private void viewAllStudents()
+    private void ViewAllStudents()
     {
-        SqlConnection con = new SqlConnection("Data Source=VISHVAS;Initial Catalog=Friday;Integrated Security=True;");
+        string connectionString = "Data Source=VISHVAS;Initial Catalog=Friday;Integrated Security=True;";
 
-        con.Close();
-
-        con.Open();
-        String selectQuery = "select * from tbl_student;";
-        SqlCommand cmd = new SqlCommand(selectQuery, con);
-        SqlDataReader dr = cmd.ExecuteReader();
-
-        while (dr.HasRows)
+        using (SqlConnection con = new SqlConnection(connectionString))
         {
-            dispalyStudents.DataSource = dr;
-            dispalyStudents.DataBind();
+            string selectQuery = "SELECT * FROM tbl_student";
+            SqlCommand cmd = new SqlCommand(selectQuery, con);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataTable dt = new DataTable();
+
+            try
+            {
+                con.Open();
+                da.Fill(dt);
+
+                if (dt.Rows.Count > 0)
+                {
+                    dispalyStudents.DataSource = dt;
+                    dispalyStudents.DataBind();
+                }
+                else
+                {
+                    Response.Write("<script>alert('NO Data Found')</script>");
+
+                    // No data found, display a message or handle it accordingly
+                }
+            }
+            catch (Exception ex)
+            {
+                Response.Write("<script>alert('SQL Catch Block')</script>");
+
+                // Handle any exceptions
+            }
         }
-        dr.Close();
-        con.Close();
-
-
-
-
     }
 }
